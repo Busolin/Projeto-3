@@ -3,7 +3,22 @@ const uri = "mongodb+srv://root:admin@cluster0.py5xv.mongodb.net/myFirstDatabase
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = client.db('Projeto-3')
 
-client.connect(async err => {
-  await db.collection('users').insertOne({'login': 'fulano', 'senha': 112639, 'nome': 'Bruno'})
-  client.close();
-});
+
+module.exports.register = function () {
+    client.connect(async err => {
+        await db.collection('users').insertOne({ 'login': 'fulano', 'senha': 112639, 'nome': 'Bruno' })
+        client.close();
+    });
+}
+module.exports.login = function (login, senha) {
+    client.connect(err => {
+        db.collection('users').findOne({ 'login': login, 'senha': senha }, function (err, result) {
+            if (err) throw err;
+
+            console.log(result)
+            client.close()
+        })
+
+
+    });
+}

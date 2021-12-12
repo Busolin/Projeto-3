@@ -1,3 +1,7 @@
+const { application } = require('express');
+const { User } = require('./controller/user');
+var dbAcess = require('./model/dbAcess');
+
 let http = require('http'), 
     path = require('path'),
     express = require('express'),
@@ -11,4 +15,6 @@ let http = require('http'),
         res.render('index')
     });
 
-app.listen(3000)
+  app.listen(3000)
+//dbAcess.register()
+dbAcess.login('fulano', 112639)
