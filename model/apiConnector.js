@@ -1,7 +1,11 @@
-/*//conecta a api sobre covid
+const { default: fetch } = require("cross-fetch")
+
+
+//conecta a api sobre covid
 const covidAPI = 'https://covid-api.mmediagroup.fr/v1/cases'
+
 module.exports.getData = function (country) {
-    fetch(covidAPI + '?country=' + inputSearch.value, {
+    fetch(covidAPI + '?country=' + country, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -13,11 +17,11 @@ module.exports.getData = function (country) {
         .then(data => {
             console.log(data)
             resp = data.All
-        }).then(th => {
+            return resp
+        })/*.then(th => {
             try {
                 document.querySelector('.table-resp').remove()
             } catch (er) {
-
             }
             try {
                 respHTML = document.createElement('table')
@@ -25,8 +29,6 @@ module.exports.getData = function (country) {
                 respHTML.className = 'table-resp'
                 document.querySelector('.search-container').append(respHTML)
             } catch (er) {
-                alert('Pais não encontrado')
             }
-        })
-})
-}*/
+        })*/
+}
