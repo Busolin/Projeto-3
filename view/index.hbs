@@ -119,18 +119,34 @@
     </div>
   </footer>
 
-  <section class="modalContainer">
+  <section class="modalContainerLogin">
     <div class="modal">
       <button class="fechar">X</button>
       <h2>Login</h2>
-      <form action="">
+      <form action="" id='loginForm'>
         <label for="email">Email</label>
         <input type="email" class="inputEmail" placeholder="Email" required />
         <span class="errorSpan"></span>
         <label for="senha">Senha</label>
         <input type="password" class="inputPassword" placeholder="Senha" required />
         <span class="errorSpan"></span>
-        <button type="submit" class="btnEntrar">Entrar</button>
+        <input type="submit" class="btnEntrar" value="Enviar"></input>
+      </form>
+    </div>
+  </section>
+
+  <section class="modalContainerRegister">
+    <div class="modal">
+      <button class="fechar" id='btnFechar'>X</button>
+      <h2>Registro</h2>
+      <form action="" id='RegisterForm'>
+        <label for="email">Email</label>
+        <input type="email" class="inputEmail" placeholder="Email" id='inputNameRegister' required />
+        <span class="errorSpan"></span>
+        <label for="senha">Senha</label>
+        <input type="password" class="inputPassword" placeholder="Senha" id='inputPasswordRegister' required />
+        <span class="errorSpan"></span>
+        <input type="submit" class="btnEntrar" value="Enviar"></input>
       </form>
     </div>
   </section>
@@ -139,13 +155,3 @@
 </body>
 
 </html>
-<tr>
-  <td>Alfreds Futterkiste</td>
-  <td>Maria Anders</td>
-  <td>Germany</td>
-</tr>
-<tr>
-  <td>Centro comercial Moctezuma</td>
-  <td>Francisco Chang</td>
-  <td>Mexico</td>
-</tr>'

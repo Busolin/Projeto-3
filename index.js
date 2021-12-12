@@ -7,7 +7,6 @@ let http = require('http'),
     app.set('views', path.join(__dirname, 'view'));
     app.use(express.static(path.join(__dirname, 'public')));
     app.use(express.urlencoded({extended: false}));
-
     app.get('/', (req, res) => {
         res.render('index')
     });
