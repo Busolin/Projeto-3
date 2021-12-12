@@ -4,21 +4,15 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 const db = client.db('Projeto-3')
 
 
-module.exports.register = function () {
+module.exports.public = function (array) {
     client.connect(async err => {
-        await db.collection('users').insertOne({ 'login': 'fulano', 'senha': 112639, 'nome': 'Bruno' })
+        await db.collection('public').insertOne(array)
         client.close();
     });
 }
-module.exports.login = function (login, senha) {
+module.exports.login = function (user) {
     client.connect(err => {
-        db.collection('users').findOne({ 'login': login, 'senha': senha }, function (err, result) {
-            if (err) throw err;
-
-            console.log(result)
-            client.close()
-        })
-
-
+        db.collection('public').findOne(user).toArray();    
     });
+    client.close()
 }
