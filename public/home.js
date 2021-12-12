@@ -22,12 +22,29 @@ sair.style.display = 'flex'
 user = { 'first_name': 'bruno', 'last_name': 'b silva', 'avatar': null }
 div_user.textContent = user.first_name + ' ' + user.last_name
 
+try {
+  document.querySelector('.table-resp').remove()
+} catch (er) {
+}
+try {
+  resp={confirmed: 1, recoverd:1, deaths:1, population:1}
+  respHTML = document.createElement('table')
+  
+  respHTML.innerHTML += '<tr><th>Total de contaminados</th>' +
+    '<th>Recuperados</th><th>Mortos</th><th>População Total</th></tr>' +
+    '<tr><th>' + resp.confirmed + '</th><th>' + resp.recoverd + '</th><th>' +
+    resp.deaths + '</th><th>' + resp.population + '</th></tr>'
+
+  respHTML.className = 'table-resp'
+  document.querySelector('.rPub').append(respHTML)
+} catch (er) {
+  alert(er)
+}
 if (sair) {
   sair.addEventListener('click', e => {
     e.preventDefault()
     localStorage.setItem('mytoken', undefined)
     window.location.reload(false);
-
   }
   )
 }
