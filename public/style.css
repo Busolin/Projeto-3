@@ -240,7 +240,33 @@ body {
   align-items: center;
   justify-content: flex-start;
 }
+.sPub{
+  justify-content: center;
+  margin-right: 400px;
+  margin-left: 600px;
+  margin-bottom: 125px;
+  flex-wrap: wrap;
+}
+.titlePub{
+  width: 40%;
+  padding: 0.7rem 0.5rem;
+  box-sizing: border-box;
+  border-radius: 5px;
+  border: 1px solid black;
 
+}
+.btnPub{
+  padding: 0.7rem 0.5rem;
+  border-radius: 5px;
+
+}
+.contentPub{
+    width: 53%;
+    padding: 0.7rem 0.5rem;
+    box-sizing: border-box;
+    border-radius: 5px;
+    border: 1px solid black;
+}
 .top-container {
   display: flex;
   height: 620px;
@@ -829,13 +855,14 @@ a:hover {
   cursor: not-allowed;
 }
 .search-container{
+  
   position: relative;
   padding: 25px;
   justify-content: center;
   display: none;
   margin-right: 300px;
   margin-left: 300px;
-  margin-bottom: 125px;
+  margin-bottom: 0px;
   flex-wrap: wrap;
 }
 .inputsearch{

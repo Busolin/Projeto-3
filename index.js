@@ -29,33 +29,38 @@ app.use(express.urlencoded({extended: false}));
 
 
 app.post("/api/login", async (req, res) => {
-  const { email, password } = req.body;
-  const user = await User.findOne({ email }).lean();
+    const { email, password } = req.body;
+    const user = await User.findOne({ email }).lean();
+  
+    if (!user) {
+      return res.json({ status: "error", error: "Email/Senha inválida. "});
+    }else{
+      console.log(user)
+    }
+  
+  
+    if (password == user.password) {
+      const token = jwt.sign(
+        {
+          id: user._id,
+          email: user.email,
+        },
+        JWT_SECRET
+      );  
+  
+      return res.json({ status: "ok", data: token });
+    }
+    else{
+      console.log(password, user.password)
+    }
+  
+    res.json({ status: "error", error: "Email/Senha inválida." });
+  });
 
-  if (!user) {
-    return res.json({ status: "error", error: "Email/Senha inválida. "});
-  }else{
-    console.log(user)
-  }
-
-
-  if (password == user.password) {
-    const token = jwt.sign(
-      {
-        id: user._id,
-        email: user.email,
-      },
-      JWT_SECRET
-    );  
-
-    return res.json({ status: "ok", data: token });
-  }
-  else{
-    console.log(password, user.password)
-  }
-
-  res.json({ status: "error", error: "Email/Senha inválida." });
-});
+  app.post("/api/data", async (req, res) => {
+    const { country } = req.body;
+    return res.json({ status: "error", error: "Email/Senha inválida." });
+  });
 
 app.post("/api/register", async (req, res) => {
   const { email, password } = req.body;
@@ -102,7 +107,7 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
-app.get("/account/home", (req, res) => {
+app.get("/home", (req, res) => {
   res.render("homeAcount");
 });
 
