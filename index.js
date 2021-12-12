@@ -24,6 +24,9 @@ app.set("views", path.join(__dirname, "view"));
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
+app.use(express.urlencoded({extended: false}));
+
+
 
 app.post("/api/login", async (req, res) => {
   const { email, password } = req.body;
