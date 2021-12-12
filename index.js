@@ -3,9 +3,9 @@ const path = require("path")
 const express = require("express")
 const app = express()
 const bodyParser = require("body-parser")
-
 const mongoose = require("mongoose");
 const User = require("./model/user");
+
 // const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -99,18 +99,8 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
-app.listen(3000);
-/* EX MONGODB
-const MongoClient = require('mongodb').MongoClient;
-
-MongoClient.connect('mongodb://localhost:27017/Projeto-3', 
-        async (err,conn) => {
-    if(err) throw err;
-    
-    const db = conn.db();
-
-    await db.collection('teste').insertOne({
-        nome: 'Bruno', idade: 20});
-    conn.close();
+app.get("/account/home", (req, res) => {
+  res.render("homeAcount");
 });
-*/
+
+app.listen(3000);
