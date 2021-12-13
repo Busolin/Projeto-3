@@ -20,7 +20,6 @@ async function loginUser(e) {
   e.preventDefault();
   const email = document.querySelector("#inputNameLogin").value;
   const password = document.querySelector("#inputPasswordLogin").value;
-
   const result = await fetch("/api/login", {
     method: "POST",
     headers: {
@@ -35,8 +34,11 @@ async function loginUser(e) {
   if (result.status === "ok") {
     alert("Logado com Sucesso.");
     localStorage.setItem('token', result.data)
+    localStorage.setItem('email', email)
+    window.location.replace('/home')
+
   } else {
-    alert(result.error);
+     alert(result.error);
   }
 }
 

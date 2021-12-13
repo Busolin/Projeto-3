@@ -5,7 +5,7 @@ const app = express()
 const bodyParser = require("body-parser")
 const mongoose = require("mongoose");
 const User = require("./model/user");
-
+const dbAcess = require('./model/dbAcess')
 // const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -27,40 +27,56 @@ app.use(bodyParser.json());
 app.use(express.urlencoded({extended: false}));
 
 
+app.post("/api/publicar", async (req, res) => {
+  const { email, titulo, conteudo, file } = req.body;
+  try {
+    await dbAcess.public({email, titulo, conteudo, file})
+
+  } catch (err) {
+    console.log(err)
+  }
+});
+
+app.post("/api/buscar",  (req, res) => {
+  const { email, key } = req.body;
+  try {
+       dbAcess.find({email, key})
+  } catch (err) {
+    console.log(err)
+  }
+  res.json({ status: "ok" });
+});
 
 app.post("/api/login", async (req, res) => {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email }).lean();
-  
-    if (!user) {
-      return res.json({ status: "error", error: "Email/Senha inválida. "});
-    }else{
-      console.log(user)
-    }
-  
-  
-    if (password == user.password) {
-      const token = jwt.sign(
-        {
-          id: user._id,
-          email: user.email,
-        },
-        JWT_SECRET
-      );  
-  
-      return res.json({ status: "ok", data: token });
-    }
-    else{
-      console.log(password, user.password)
-    }
-  
-    res.json({ status: "error", error: "Email/Senha inválida." });
-  });
+  const { email, password } = req.body;
+  const user = await User.findOne({ email }).lean();
 
-  app.post("/api/data", async (req, res) => {
-    const { country } = req.body;
-    return res.json({ status: "error", error: "Email/Senha inválida." });
-  });
+  if (!user) {
+    return res.json({ status: "error", error: "Email/Senha inválida. "});
+  }else{
+    console.log(user)
+  }
+
+
+  if (password == user.password) {
+    const token = jwt.sign(
+      {
+        id: user._id,
+        email: user.email,
+      },
+      JWT_SECRET
+    );  
+
+    return res.json({ status: "ok", data: token });
+  }
+  else{
+    console.log(password, user.password)
+  }
+
+  res.json({ status: "error", error: "Email/Senha inválida." });
+});
+
+
 
 app.post("/api/register", async (req, res) => {
   const { email, password } = req.body;
@@ -109,6 +125,7 @@ app.get("/", (req, res) => {
 
 app.get("/home", (req, res) => {
   res.render("homeAcount");
+  
 });
 
 app.listen(3000);
