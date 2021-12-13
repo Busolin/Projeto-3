@@ -3,19 +3,17 @@ const div_user = document.querySelector('.user')
 const sair = document.querySelector('.sair')
 const publicarBtn = document.querySelector('.btnPub')
 const buscarBtn = document.querySelector('.btnBusPub')
-
+const searchPub = document.querySelector('.searchPub')
 var token = localStorage.getItem('token')
-var email
 console.log(token)
 if (token == undefined) {
   window.location.replace('..')
   console.log('estou aqui')
 
 } else {
-  email = localStorage.getItem('email')
+  const email = localStorage.getItem('email')
   if (email == undefined) {
     window.location.replace('..')
-
   }
   document.querySelector('.pricing').style.display = 'none'
   document.querySelector('.divider').style.display = 'none'
@@ -30,31 +28,31 @@ if (token == undefined) {
     publicarBtn.addEventListener('click', async e => {
       e.preventDefault()
 
-      const email = 'bruno@bsds.com'
       const titulo = document.querySelector('.titlePub').value
       const conteudo = document.querySelector('.contentPub').value
       const file = document.querySelector('.midiaPub').value
-      console.log(file)
-      await fetch("/api/publicar", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          titulo,
-          conteudo,
-          file
-        }),
-      })
+      if (titulo != '') {
+        //FileSystemFileEntry.getItem(file)
+        await fetch("/api/publicar", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            titulo,
+            conteudo,
+            file
+          }),
+        })
+      }
     }
     )
   }
   if (buscarBtn) {
     buscarBtn.addEventListener('click', async e => {
       e.preventDefault()
-      const email = 'bruno@bsds.com'
-      const key = ' '
+      const key = searchPub.value
 
       await fetch("/api/buscar", {
         method: "POST",
@@ -63,32 +61,35 @@ if (token == undefined) {
         },
         body: JSON.stringify({
           email,
-          key
+          key,
         }),
-      })
-    }
-    )
-  }
+      }).then((res) => res.json()).then((data) => {
+        try {
+          tablelist=document.querySelectorAll('.table-resp')
+          console.log(tablelist)
+          tablelist.forEach(element => {
+            element.remove()
+          });
+        } catch (er) {
+        }
+        data.content.forEach(pub => {
+          try {
+            respHTML = document.createElement('table')
 
-  /*
-  try {
-    document.querySelector('.table-resp').remove()
-  } catch (er) {
+            respHTML.innerHTML += '<tr><th>Titulo</th><th>' + pub.titulo + '</tr>'
+            respHTML.innerHTML += '<tr><th>Conteudo</th><th>' + pub.conteudo + '</tr>'
+            respHTML.innerHTML += '<tr><th>Arquivo</th><th>' + pub.file + '</tr>'
+            respHTML.className = 'table-resp'
+
+            document.querySelector('.rPub').append(respHTML)
+          } catch (er) {
+            alert(er)
+
+          };
+        });
+      })
+    })
   }
-  try {
-    resp={confirmed: 1, recoverd:1, deaths:1, population:1}
-    respHTML = document.createElement('table')
-    
-    respHTML.innerHTML += '<tr><th>Total de contaminados</th>' +
-      '<th>Recuperados</th><th>Mortos</th><th>População Total</th></tr>' +
-      '<tr><th>' + resp.confirmed + '</th><th>' + resp.recoverd + '</th><th>' +
-      resp.deaths + '</th><th>' + resp.population + '</th></tr>'
-  
-    respHTML.className = 'table-resp'
-    document.querySelector('.rPub').append(respHTML)
-  } catch (er) {
-    alert(er)
-  }*/
   if (sair) {
     sair.addEventListener('click', e => {
       e.preventDefault()

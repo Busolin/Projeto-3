@@ -6,8 +6,15 @@ const bodyParser = require("body-parser")
 const mongoose = require("mongoose");
 const User = require("./model/user");
 const dbAcess = require('./model/dbAcess')
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 // const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { MongoClient } = require('mongodb');
+const uri = "mongodb+srv://root:admin@cluster0.py5xv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+const db = client.db('Projeto-3')
+
 
 const JWT_SECRET = 'jadiovhafnadklfndklavnçknopr¨&!*#&¨!%$*$%*!$%$&%3up1ufjpjklfnqeklfn'
 
@@ -24,27 +31,44 @@ app.set("views", path.join(__dirname, "view"));
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 
 
-app.post("/api/publicar", async (req, res) => {
+app.post("/api/publicar",  async (req, res) => {
   const { email, titulo, conteudo, file } = req.body;
+
+  console.log(arq, file)
   try {
-    await dbAcess.public({email, titulo, conteudo, file})
+    await dbAcess.public({ email, titulo, conteudo, arq })
 
   } catch (err) {
     console.log(err)
   }
 });
 
-app.post("/api/buscar",  (req, res) => {
+app.post("/api/buscar", (req, res) => {
   const { email, key } = req.body;
+  let resposta
+  //console.log(email, key)
   try {
-       dbAcess.find({email, key})
+    var qr
+    client.connect(err => {
+      if (key != '') {
+        qr = { 'email': email, 'titulo': key }
+      } else {
+        qr = { 'email': email }
+      }
+      db.collection('public').find(qr).toArray(function (err, result) {
+        if (err) throw err;
+        res.json({ content: result });
+        //console.log(result)
+        client.close();
+      });
+    });
   } catch (err) {
     console.log(err)
   }
-  res.json({ status: "ok" });
+
 });
 
 app.post("/api/login", async (req, res) => {
@@ -52,8 +76,8 @@ app.post("/api/login", async (req, res) => {
   const user = await User.findOne({ email }).lean();
 
   if (!user) {
-    return res.json({ status: "error", error: "Email/Senha inválida. "});
-  }else{
+    return res.json({ status: "error", error: "Email/Senha inválida. " });
+  } else {
     console.log(user)
   }
 
@@ -65,11 +89,11 @@ app.post("/api/login", async (req, res) => {
         email: user.email,
       },
       JWT_SECRET
-    );  
+    );
 
     return res.json({ status: "ok", data: token });
   }
-  else{
+  else {
     console.log(password, user.password)
   }
 
@@ -97,7 +121,7 @@ app.post("/api/register", async (req, res) => {
     });
   }
 
-//   const password = await bcrypt.hash(password, 10);
+  //   const password = await bcrypt.hash(password, 10);
 
   try {
     const response = await User.create({
@@ -125,7 +149,7 @@ app.get("/", (req, res) => {
 
 app.get("/home", (req, res) => {
   res.render("homeAcount");
-  
+
 });
 
 app.listen(3000);
