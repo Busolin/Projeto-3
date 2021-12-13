@@ -6,8 +6,7 @@ const bodyParser = require("body-parser")
 const mongoose = require("mongoose");
 const User = require("./model/user");
 const dbAcess = require('./model/dbAcess')
-const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
+
 // const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { MongoClient } = require('mongodb');
@@ -37,9 +36,8 @@ app.use(express.urlencoded({ extended: false }));
 app.post("/api/publicar",  async (req, res) => {
   const { email, titulo, conteudo, file } = req.body;
 
-  console.log(arq, file)
   try {
-    await dbAcess.public({ email, titulo, conteudo, arq })
+    await dbAcess.public({ email, titulo, conteudo, file })
 
   } catch (err) {
     console.log(err)
@@ -48,8 +46,6 @@ app.post("/api/publicar",  async (req, res) => {
 
 app.post("/api/buscar", (req, res) => {
   const { email, key } = req.body;
-  let resposta
-  //console.log(email, key)
   try {
     var qr
     client.connect(err => {
@@ -61,7 +57,6 @@ app.post("/api/buscar", (req, res) => {
       db.collection('public').find(qr).toArray(function (err, result) {
         if (err) throw err;
         res.json({ content: result });
-        //console.log(result)
         client.close();
       });
     });
