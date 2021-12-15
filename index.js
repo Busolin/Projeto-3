@@ -20,11 +20,7 @@ const uri = "mongodb+srv://root:admin@cluster0.py5xv.mongodb.net/myFirstDatabase
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = client.db('Projeto-3')
 
-app.use(function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  next();
-});
+
 const JWT_SECRET = 'jadiovhafnadklfndklavnçknopr¨&!*#&¨!%$*$%*!$%$&%3up1ufjpjklfnqeklfn'
 
 mongoose.connect(
