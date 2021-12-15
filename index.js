@@ -11,7 +11,7 @@ const multer = require('multer');
 const storage = multer.memoryStorage()
 
 //dest: 'public/'
-const parser = multer({ dest: 'public/' })
+const parser = multer({ dest: 'public/uploads/' })
 const fs = require('fs')
 
 const jwt = require("jsonwebtoken");

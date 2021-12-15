@@ -5,6 +5,8 @@ const publicarBtn = document.querySelector('.btnPub')
 const buscarBtn = document.querySelector('.btnBusPub')
 const searchPub = document.querySelector('.searchPub')
 var token = localStorage.getItem('token')
+const spub = document.querySelector('.sPub')
+const simg = document.querySelector('.simg')
 console.log(token)
 if (token == undefined) {
   window.location.replace('..')
@@ -23,8 +25,19 @@ if (token == undefined) {
   sair.style.display = 'flex'
   div_user.textContent = email
 
-
-  if (publicarBtn) {
+  spub.addEventListener('submit', event => {
+    event.preventDefault();
+    let formData = new FormData();
+    formData.append('imagem', event.target[3].files[0]);
+    fetch('api/image', {method: 'post', body: formData})
+    .then(res => res.json())
+    .then(res => {
+        simg.src = 'uploads/'+res.content.filename;
+        console.log(res.content)
+    })
+    .catch(console.log);
+});
+  /*if (publicarBtn) {
     publicarBtn.addEventListener('click', async e => {
       e.preventDefault()
 
@@ -48,7 +61,7 @@ if (token == undefined) {
       }
     }
     )
-  }
+  }*/
   if (buscarBtn) {
     buscarBtn.addEventListener('click', async e => {
       e.preventDefault()

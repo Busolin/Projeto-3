@@ -336,7 +336,9 @@ body {
   background-size: 170px;
   background-repeat: no-repeat;
 }
-
+.simg{
+  max-width: 150px;
+}
 .single-logo.two {
   background-image: url('https://global-uploads.webflow.com/5d9d02c4b01a536c7d5d4a35/615750d3897fc4696065988b_webflow-logo.png');
   background-position: 50% 50%;
