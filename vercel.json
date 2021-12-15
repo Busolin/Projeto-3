@@ -14,7 +14,7 @@
     ],
     "functions": {
         "api/hello.js": {
-          "includeFiles": "public/uploads"
+          "includeFiles": "public/uploads/*"
         }
       }
 }
