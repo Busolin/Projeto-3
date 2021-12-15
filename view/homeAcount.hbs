@@ -29,12 +29,13 @@
   </header>
   <section class="search-container">
   </section>
-  <section class="sPub">
+  <form class="sPub" enctype="multipart/form-data">
     <input class='titlePub' placeholder="Titulo" required/>
     <button type="submit" class="btnPub">Publicar</button>
     <input class= 'contentPub' placeholder="Conteudo"/>
-    <input type='file' accept="image/*,video/*" class='midiaPub'/>
-  </section>
+    <input type='file' name="imagem" accept="image/*" class='midiaPub'/>
+    <img class="simg">
+  </form>
   <section class="rPub">
       <input class='searchPub' placeholder="Buscar por publicações" required/>
       <button type="submit" class="btnBusPub">Buscar</button>

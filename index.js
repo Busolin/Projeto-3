@@ -7,14 +7,24 @@ const mongoose = require("mongoose");
 const User = require("./model/user");
 const dbAcess = require('./model/dbAcess')
 
-// const bcrypt = require("bcryptjs");
+const multer = require('multer');
+const storage = multer.memoryStorage()
+
+//dest: 'public/'
+const parser = multer({ dest: 'public/' })
+const fs = require('fs')
+
 const jwt = require("jsonwebtoken");
 const { MongoClient } = require('mongodb');
 const uri = "mongodb+srv://root:admin@cluster0.py5xv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = client.db('Projeto-3')
 
-
+app.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
 const JWT_SECRET = 'jadiovhafnadklfndklavnçknopr¨&!*#&¨!%$*$%*!$%$&%3up1ufjpjklfnqeklfn'
 
 mongoose.connect(
@@ -24,16 +34,32 @@ mongoose.connect(
     useUnifiedTopology: true
   }
 );
-
 app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "view"));
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
+app.get('public/', function (req, res, next) {
+  const filename = req.query.filename
 
+  res.send()
+})
+app.post('/api/image', async (req, res) => {
+  parser.single('imagem')(req, res, err => {
+    console.log(req.file)
+    if (err)
+      res.status(500).json({ error: 1, content: err });
+    else {
 
-app.post("/api/publicar",  async (req, res) => {
+      img = 0
+      //img = fs.writeFileSync("public/new-path.jpg", req.file.buffer);
+      console.log(img)
+      res.status(200).json({ error: 0, content: req.file, imagem: img });
+    }
+  });
+})
+app.post("/api/publicar", async (req, res) => {
   const { email, titulo, conteudo, file } = req.body;
 
   try {
