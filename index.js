@@ -6,14 +6,12 @@ const bodyParser = require("body-parser")
 const mongoose = require("mongoose");
 const User = require("./model/user");
 const dbAcess = require('./model/dbAcess')
-
 const multer = require('multer');
 const storage = multer.memoryStorage()
-
-//dest: 'public/'
+const { base64encode, base64decode } = require('nodejs-base64');
 const parser = multer({ dest: 'public/uploads/' })
 const fs = require('fs')
-
+const url = require('url')
 const jwt = require("jsonwebtoken");
 const { MongoClient } = require('mongodb');
 const uri = "mongodb+srv://root:admin@cluster0.py5xv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
@@ -36,34 +34,31 @@ app.set("views", path.join(__dirname, "view"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
-app.get('public/', function (req, res, next) {
-  const filename = req.query.filename
 
-  res.send()
-})
 app.post('/api/image', async (req, res) => {
   parser.single('imagem')(req, res, err => {
-    console.log(req.file)
+    //console.log(req.file)
     if (err)
       res.status(500).json({ error: 1, content: err });
     else {
 
-      img = 0
       //img = fs.writeFileSync("public/new-path.jpg", req.file.buffer);
-      console.log(img)
-      res.status(200).json({ error: 0, content: req.file, imagem: img });
+      //console.log(req.file)
+
+      res.status(200).json({ error: 0, content: req.file });
     }
   });
 })
 app.post("/api/publicar", async (req, res) => {
-  const { email, titulo, conteudo, file } = req.body;
-
+  const { email, titulo, conteudo, filePath } = req.body;
+  console.log(filePath)
   try {
-    await dbAcess.public({ email, titulo, conteudo, file })
-
+    await dbAcess.public({ email, titulo, conteudo, filePath })
+    
   } catch (err) {
     console.log(err)
   }
+  res.json({status: 'ok'})
 });
 
 app.post("/api/buscar", (req, res) => {
@@ -76,11 +71,13 @@ app.post("/api/buscar", (req, res) => {
       } else {
         qr = { 'email': email }
       }
-      db.collection('public').find(qr).toArray(function (err, result) {
+      db.collection('public').find(qr).toArray(function (err, result, cb) {
         if (err) throw err;
+        console.log(result)
+        //result.filePath = url.parse(result.filePath).pathname
         res.json({ content: result });
         client.close();
-      });
+      })
     });
   } catch (err) {
     console.log(err)
@@ -170,3 +167,4 @@ app.get("/home", (req, res) => {
 });
 
 app.listen(3000);
+console.log('http://localhost:3000')
