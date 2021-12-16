@@ -17,7 +17,7 @@ const { MongoClient } = require('mongodb');
 const uri = "mongodb+srv://root:admin@cluster0.py5xv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = client.db('Projeto-3')
-
+const cookieParser = require('cookie-parser')
 
 const JWT_SECRET = 'jadiovhafnadklfndklavnçknopr¨&!*#&¨!%$*$%*!$%$&%3up1ufjpjklfnqeklfn'
 
@@ -34,6 +34,17 @@ app.set("views", path.join(__dirname, "view"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser())
+
+app.get("/api/cookies", async (req, res) => {
+  try {
+    res.clearCookie('token')
+    res.clearCookie('email')
+  } catch (err) {
+    console.log(err)
+  }
+  res.json({ status: 'ok' })
+});
 
 app.post('/api/image', async (req, res) => {
   parser.single('imagem')(req, res, err => {
@@ -54,11 +65,11 @@ app.post("/api/publicar", async (req, res) => {
   console.log(filePath)
   try {
     await dbAcess.public({ email, titulo, conteudo, filePath })
-    
+
   } catch (err) {
     console.log(err)
   }
-  res.json({status: 'ok'})
+  res.json({ status: 'ok' })
 });
 
 app.post("/api/buscar", (req, res) => {
@@ -104,8 +115,10 @@ app.post("/api/login", async (req, res) => {
       },
       JWT_SECRET
     );
+    res.cookie('token', token)
+    res.cookie('email', email)
+    return res.json({ status: "ok" });
 
-    return res.json({ status: "ok", data: token });
   }
   else {
     console.log(password, user.password)
@@ -162,10 +175,14 @@ app.get("/", (req, res) => {
 });
 
 app.get("/home", (req, res) => {
-  res.render("homeAcount");
-
+  console.log('/home')
+  if (req.cookies && req.cookies.token) {
+    res.render("homeAcount", {
+      email: res.cookie.email
+    });
+  } else {
+    res.redirect('/')
+  }
 });
 app.listen(process.env.PORT || 3000);
-
-//app.listen(3000);
-//console.log('http://localhost:3000')
+console.log('http://localhost:3000')

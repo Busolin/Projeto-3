@@ -1,3 +1,7 @@
+const statusLogin = document.getElementById('statusLogin')
+
+const statusRegister = document.getElementById('statusRegister')
+
 const btnRegister = document.querySelector(".signUpBtn");
 const btnLogin = document.querySelector(".signInBtn");
 
@@ -32,13 +36,13 @@ async function loginUser(e) {
   }).then((res) => res.json());
 
   if (result.status === "ok") {
-    alert("Logado com Sucesso.");
-    localStorage.setItem('token', result.data)
-    localStorage.setItem('email', email)
+    //alert("Logado com Sucesso.");
+     
     window.location.replace('/home')
 
   } else {
-     alert(result.error);
+    statusLogin.textContent = result.error
+    //alert(result.error);
   }
 }
 
@@ -59,9 +63,11 @@ async function registerUser(e) {
   }).then((res) => res.json());
 
   if (result.status === "ok") {
-    alert("Registrado com Sucesso.");
+    statusRegister.textContent = "Registrado com Sucesso."
+    //alert("Registrado com Sucesso.");
   } else {
-    alert(result.error);
+    statusRegister.textContent = result.error
+    //alert(result.error);
   }
 }
 

@@ -9,17 +9,3 @@ module.exports.public = function (array) {
         client.close();
     });
 }
-/*
-module.exports.find = function (email, key) {
-        client.connect(err => {
-         db.collection('public').find({ 'email': 'bruno@bsds.com' }).toArray(function (err, result) {
-            if (err) throw err;
-            //console.log(result);
-            resposta = result
-            //console.log(resposta)
-            client.close();
-            return resposta
-        });    
-    });
-
-}*/
